@@ -1,14 +1,20 @@
 const User = require("../models/UserModel");
 const register = async (req, res) => {
   try {
-    const { username, email, phone, password } = req.body;
+    const { username, email, phone, password, active } = req.body;
 
     const userExist = await User.findOne({ email });
     if (userExist) {
       // console.log("user Exist");
-      return res.json("User Already Exist ");
+      return res.json({ message: "User Already Exist with this mail" });
     }
-    const UserCreate = await User.create({ username, email, phone, password });
+    const UserCreate = await User.create({
+      username,
+      email,
+      phone,
+      password,
+      active,
+    });
     res.json({
       token: await UserCreate.generateToken(),
     });

@@ -22,9 +22,9 @@ const Signin = () => {
     e.preventDefault();
 
     if (
-      user.username === "" &&
-      user.email === "" &&
-      user.password === "" &&
+      user.username === "" ||
+      user.email === "" ||
+      user.password === "" ||
       user.phone === ""
     ) {
       toast.error("please fill all field", {
@@ -36,49 +36,54 @@ const Signin = () => {
         theme: "colored",
       });
       return setLoading(false);
-    }
-
-    const response = await fetch(
-      `${process.env.REACT_APP_URL}5000/auth//signup`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(user),
-      }
-    );
-    const json = await response.json();
-    const stringy = JSON.stringify(json);
-    const Token = await JSON.parse(stringy);
-    console.log(Token?.token);
-    if (Token.token) {
-      // localStorage.setItem("Token", Token.token);
-      // console.log(Token.token);
-      storeToken(Token.token);
-      navigate("/");
-      toast.success(`Welcome ${user.email}`, {
-        autoClose: 2500,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: false,
-        draggable: true,
-        theme: "colored",
-      });
-      return setLoading(true);
     } else {
+      // console.log("not sended");
+      const response = await fetch(
+        "http://localhost:5000/auth/signup",
+        // `${process.env.REACT_APP_URL}/auth//signup`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(user),
+        }
+      );
+      // console.log("senddes");
+      const json = await response.json();
       // console.log(json);
-      toast.error(`${json} with this mail`, {
-        autoClose: 2500,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: false,
-        draggable: true,
-        theme: "colored",
-      });
-      return setLoading(false);
+      const stringy = JSON.stringify(json);
+      const Token = await JSON.parse(stringy);
+      // console.log(Token?.token);
+      if (Token.token) {
+        // localStorage.setItem("Token", Token.token);
+        // console.log(Token.token);
+        storeToken(Token.token);
+        navigate("/");
+        toast.success(`Welcome ${user.email}`, {
+          autoClose: 2500,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          theme: "colored",
+        });
+        return setLoading(true);
+      } else {
+        // console.log(json);
+        toast.error(json.message, {
+          autoClose: 2500,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          theme: "colored",
+        });
+        return setLoading(false);
+      }
     }
     // console.log(Token?.token);
+    setLoading(false);
   };
   return (
     <>

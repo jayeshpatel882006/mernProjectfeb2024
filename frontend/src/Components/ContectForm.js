@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../Store/Auth";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const ContectForm = () => {
   const [data, setdata] = useState({
@@ -29,7 +30,7 @@ const ContectForm = () => {
   const handalSubmit = async (e) => {
     e.preventDefault();
 
-    const response = await fetch("http://localhost:5000/contect", {
+    const response = await fetch(`${process.env.REACT_APP_URL}/contect`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -37,12 +38,19 @@ const ContectForm = () => {
       body: JSON.stringify(data),
     });
     const isDone = await response.json();
-    alert(isDone.msg);
+    toast.success(isDone.msg, {
+      autoClose: 2500,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: false,
+      draggable: true,
+      theme: "colored",
+    });
     console.log(isDone);
 
     setdata({
-      email: user.email,
-      username: user.username,
+      email: "",
+      username: "",
       message: "",
     });
   };

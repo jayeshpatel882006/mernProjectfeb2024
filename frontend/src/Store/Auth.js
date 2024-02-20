@@ -23,7 +23,7 @@ export const AuthProvider = ({ children }) => {
 
   const getServices = async () => {
     try {
-      const response = await fetch("http://localhost:5000/service", {
+      const response = await fetch(`${process.env.REACT_APP_URL}/service`, {
         method: "GET",
         headers: {
           Authorize: token,
@@ -43,7 +43,7 @@ export const AuthProvider = ({ children }) => {
 
   const userAuthentication = async () => {
     try {
-      const response = await fetch("http://localhost:5000/auth/user", {
+      const response = await fetch(`${process.env.REACT_APP_URL}/auth/user`, {
         method: "GET",
         headers: {
           Authorize: token,
@@ -58,7 +58,7 @@ export const AuthProvider = ({ children }) => {
       // console.log(data);
       // }
     } catch (error) {
-      console.log("Frontend Auth.js Error", error);
+      console.log("Frontend Auth.js Error in userAuthentication", error);
     }
   };
 

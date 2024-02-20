@@ -31,16 +31,13 @@ const Login = () => {
         theme: "colored",
       });
     } else {
-      const response = await fetch(
-        `${process.env.REACT_APP_URL}5000/auth/login`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(user),
-        }
-      );
+      const response = await fetch(`${process.env.REACT_APP_URL}/auth/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(user),
+      });
       console.log("json");
       // console.log(response);
       const json = await response.json();

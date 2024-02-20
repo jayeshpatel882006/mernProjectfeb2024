@@ -6,6 +6,9 @@ import Spinner from "./Spinner";
 
 const Adminpanal = () => {
   const [allUser, setAllUser] = useState();
+  const [activeUser, setActiveUser] = useState([]);
+  const [nonactiveUser, setNonActiveUser] = useState([]);
+  const [toggalactive, settoggalactive] = useState(true);
   const { user, setLoading, loading } = useAuth();
   const [editUser, setEditUSer] = useState();
   const [showModal, setShowModal] = useState(false);
@@ -18,14 +21,28 @@ const Adminpanal = () => {
       return navigate("/");
     }
 
-    const response = await fetch("http://localhost:5000/admin/getAllUser", {
-      method: "GET",
-    });
+    const response = await fetch(
+      `${process.env.REACT_APP_URL}/admin/getAllUser`,
+      {
+        method: "GET",
+      }
+    );
     let data = await response.json();
     // console.log(data);
 
     let Done = setAllUser(data);
 
+    let active = [];
+    let inactive = [];
+    data.forEach((item) => {
+      if (item.active === true) {
+        active.push(item);
+      } else {
+        inactive.push(item);
+      }
+    });
+    setActiveUser(active);
+    setNonActiveUser(inactive);
     return setLoading(false);
   };
 
@@ -44,13 +61,16 @@ const Adminpanal = () => {
   };
   const handaldelete = async (no) => {
     let userId = allUser[no];
-    const response = await fetch("http://localhost:5000/admin/deleteUser", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(userId),
-    });
+    const response = await fetch(
+      `${process.env.REACT_APP_URL}/admin/deleteUser`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userId),
+      }
+    );
     console.log(await response.json());
     console.log(userId);
     toast.success("User Deletd", {
@@ -69,7 +89,7 @@ const Adminpanal = () => {
     setShowModal(true);
     setLoading(true);
     setEditUSer(allUser[index]);
-    console.log(allUser[index]);
+    // console.log(allUser[index]);
     setLoading(false);
   };
 
@@ -102,13 +122,16 @@ const Adminpanal = () => {
         theme: "colored",
       });
     } else {
-      const response = await fetch("http://localhost:5000/admin/editUser", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(editUser),
-      });
+      const response = await fetch(
+        `${process.env.REACT_APP_URL}/admin/editUser`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(editUser),
+        }
+      );
       let output = await response.json();
       if (output.modifiedCount === 1) {
         // console.log("Done");
@@ -121,6 +144,8 @@ const Adminpanal = () => {
           draggable: true,
           theme: "colored",
         });
+        // console.log(activeUser);
+        // console.log(nonactiveUser);
       } else {
         // console.log(editUser);
         toast.info("Nothing Edited", {
@@ -135,6 +160,7 @@ const Adminpanal = () => {
       setShowModal(false);
       // console.log(document.getElementById("editModal"));
       setLoading(false);
+
       getUserData();
     }
   };
@@ -142,6 +168,7 @@ const Adminpanal = () => {
     setLoading(true);
     getUserData();
     checkIsAdmin();
+
     // console.log(allUser);
 
     return () => {
@@ -157,7 +184,37 @@ const Adminpanal = () => {
             className="container rounded mt-3 p-3"
             // style={{ backgroundColor: "#808080" }}
           >
-            <h1 id="mainName">Hello Admin</h1>
+            <div className="d-flex justify-content-between">
+              <h1 id="mainName">Hello Admin</h1>
+              <div className="d-flex gap-3">
+                <div>
+                  <input
+                    type="radio"
+                    className="btn-check"
+                    name="options"
+                    id="option1"
+                    autoComplete="off"
+                    onChange={() => settoggalactive(true)}
+                  />
+                  <label className="btn btn-primary" htmlFor="option1">
+                    Active User - {activeUser.length}
+                  </label>
+                </div>
+                <div>
+                  <input
+                    type="radio"
+                    className="btn-check"
+                    name="options"
+                    id="option2"
+                    autoComplete="off"
+                    onChange={() => settoggalactive(false)}
+                  />
+                  <label className="btn btn-primary" htmlFor="option2">
+                    Not Active User - {nonactiveUser.length}
+                  </label>
+                </div>
+              </div>
+            </div>
             <div>
               <table className="table  table-hover table-bordered">
                 <thead>
@@ -168,53 +225,51 @@ const Adminpanal = () => {
                     <th className="wrap">Email</th>
                     <th className="wrap">Phone</th>
                     <th className="wrap">POST</th>
-                    <th className="wrap">Stats</th>
                     <th className="wrap">Action</th>
                   </tr>
                 </thead>
                 <tbody className="table-group-divider">
-                  {allUser?.map((item, index) => {
-                    const {
-                      username,
-                      phone,
-                      password,
-                      email,
-                      isAdmin,
-                      active,
-                    } = item;
-                    return (
-                      <>
-                        <tr key={index}>
-                          <td className=" flex-wrap">{index + 1}</td>
-                          <td className=" flex-wrap">{username}</td>
-                          <td className=" flex-wrap">{password}</td>
-                          <td className=" flex-wrap">{email}</td>
-                          <td className=" flex-wrap">{phone}</td>
-                          <td className=" flex-wrap">
-                            {isAdmin ? "ADMIN" : "USER"}
-                          </td>
-                          <td className=" flex-wrap">
-                            {active ? "Yes" : "No"}
-                          </td>
-                          <td className=" flex-wrap">
-                            <button
-                              className="btn btn-success mx-1"
-                              // data-bs-target="#exampleModal"
-                              // data-bs-toggle="modal"
-                              onClick={() => handalEditShow(index)}
-                            >
-                              Edit
-                            </button>
-                            {user.username == username ? null : (
-                              <button
-                                className="btn btn-danger mx-1"
-                                onClick={() => handaldelete(index)}
-                              >
-                                Delete
-                              </button>
-                            )}
-                          </td>
-                          {/* <div key={index}>
+                  {toggalactive
+                    ? activeUser?.map((item, index) => {
+                        const {
+                          username,
+                          phone,
+                          password,
+                          email,
+                          isAdmin,
+                          active,
+                        } = item;
+                        return (
+                          <>
+                            <tr key={index}>
+                              <td className=" flex-wrap">{index + 1}</td>
+                              <td className=" flex-wrap">{username}</td>
+                              <td className=" flex-wrap">{password}</td>
+                              <td className=" flex-wrap">{email}</td>
+                              <td className=" flex-wrap">{phone}</td>
+                              <td className=" flex-wrap">
+                                {isAdmin ? "ADMIN" : "USER"}
+                              </td>
+
+                              <td className=" flex-wrap">
+                                <button
+                                  className="btn btn-success mx-1"
+                                  // data-bs-target="#exampleModal"
+                                  // data-bs-toggle="modal"
+                                  onClick={() => handalEditShow(index)}
+                                >
+                                  Edit
+                                </button>
+                                {user.username == username ? null : (
+                                  <button
+                                    className="btn btn-danger mx-1"
+                                    onClick={() => handaldelete(index)}
+                                  >
+                                    Delete
+                                  </button>
+                                )}
+                              </td>
+                              {/* <div key={index}>
                             <UserDetail
                               username={username}
                               phone={phone}
@@ -222,10 +277,61 @@ const Adminpanal = () => {
                               email={email}
                             />
                           </div> */}
-                        </tr>
-                      </>
-                    );
-                  })}
+                            </tr>
+                          </>
+                        );
+                      })
+                    : nonactiveUser?.map((item, index) => {
+                        const {
+                          username,
+                          phone,
+                          password,
+                          email,
+                          isAdmin,
+                          active,
+                        } = item;
+                        return (
+                          <>
+                            <tr key={index}>
+                              <td className=" flex-wrap">{index + 1}</td>
+                              <td className=" flex-wrap">{username}</td>
+                              <td className=" flex-wrap">{password}</td>
+                              <td className=" flex-wrap">{email}</td>
+                              <td className=" flex-wrap">{phone}</td>
+                              <td className=" flex-wrap">
+                                {isAdmin ? "ADMIN" : "USER"}
+                              </td>
+
+                              <td className=" flex-wrap">
+                                <button
+                                  className="btn btn-success mx-1"
+                                  // data-bs-target="#exampleModal"
+                                  // data-bs-toggle="modal"
+                                  onClick={() => handalEditShow(index)}
+                                >
+                                  Edit
+                                </button>
+                                {user.username == username ? null : (
+                                  <button
+                                    className="btn btn-danger mx-1"
+                                    onClick={() => handaldelete(index)}
+                                  >
+                                    Delete
+                                  </button>
+                                )}
+                              </td>
+                              {/* <div key={index}>
+                          <UserDetail
+                            username={username}
+                            phone={phone}
+                            password={password}
+                            email={email}
+                          />
+                        </div> */}
+                            </tr>
+                          </>
+                        );
+                      })}
                 </tbody>
               </table>
 

@@ -7,6 +7,7 @@ const validate = (schema) => async (req, res, next) => {
     // console.log(err.errors.message);
     const msg = err.errors[0].message;
     // res.json({ error: msg });
+    // console.log("catch block", msg);
     const eroor = {
       message: msg,
     };
