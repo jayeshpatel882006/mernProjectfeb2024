@@ -1,25 +1,30 @@
 const User = require("../models/UserModel");
 const register = async (req, res) => {
   try {
-    const { username, email, phone, password, active } = req.body;
+    const { username, email, phone, password, active, isAdmin, date } =
+      req.body;
 
     const userExist = await User.findOne({ email });
     if (userExist) {
       // console.log("user Exist");
       return res.json({ message: "User Already Exist with this mail" });
     }
+    // console.log({ username, email, phone, password, active, isAdmin, date });
+    // res.json({ username, email, phone, password, active, isAdmin, date });
     const UserCreate = await User.create({
       username,
       email,
       phone,
       password,
       active,
+      isAdmin,
+      date,
     });
     res.json({
       token: await UserCreate.generateToken(),
     });
   } catch (error) {
-    res.json("internal servar errore");
+    res.json(error);
   }
 };
 

@@ -8,6 +8,7 @@ const loginValidat = require("../Validator/loginVakidator");
 const userMiddleware = require("../middleware/userMiddleware");
 
 router.route("/signup").post(validate(signupSchema), control.register);
+// router.route("/signup").post( control.register);
 router.route("/login").post(loginvalidate(loginValidat), control.login);
 // router.route("/user").get(control.user);
 router.route("/user").get(userMiddleware, control.user);

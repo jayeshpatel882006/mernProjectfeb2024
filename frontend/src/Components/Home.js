@@ -7,6 +7,7 @@ import Spinner from "./Spinner";
 const Home = () => {
   // const [user, setUser] = useState();
   const navigate = useNavigate();
+
   const {
     logOutHandal,
     user,

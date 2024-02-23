@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const moment = require("moment");
 const jwt = require("jsonwebtoken");
 
 const UserSchema = new mongoose.Schema({
@@ -25,6 +26,15 @@ const UserSchema = new mongoose.Schema({
   active: {
     type: Boolean,
     default: false,
+  },
+  date: {
+    createdAt: {
+      type: String,
+      default: moment().format("DD-MM-YYYY"),
+    },
+    updatedAt: {
+      type: String,
+    },
   },
 });
 const SecraetKey = "uihfg785e6893j@78yfggjhvbjkjbksjdhwie7rughksliqwoieiugbv";

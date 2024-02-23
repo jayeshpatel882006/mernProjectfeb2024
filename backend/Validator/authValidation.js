@@ -16,6 +16,9 @@ const signupSchema = z.object({
   password: z
     .string({ required_error: "Password is mendetory" })
     .min(4, { message: "Length of password is heigher than 4 letter" }),
+  isAdmin: z.any(),
+  active: z.any(),
+  date: z.any(),
 });
 
 module.exports = signupSchema;

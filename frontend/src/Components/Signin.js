@@ -89,8 +89,18 @@ const Signin = () => {
     <>
       {!loading ? (
         <>
-          <div className="container border rounded p-3 mt-3">
-            <form onSubmit={handalSubmit}>
+          <div
+            className="container border rounded p-3 mt-3"
+            style={{
+              margin: "auto",
+              width: "fit-content",
+              position: "absolute",
+              top: "45%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+            }}
+          >
+            <form className="d-flex flex-column" onSubmit={handalSubmit}>
               <div className="mb-3">
                 <label htmlFor="exampleInputEmail1" className="form-label">
                   UserName
@@ -146,11 +156,16 @@ const Signin = () => {
                 />
               </div>
 
-              <button type="submit" className="btn btn-primary">
-                Submit
+              <button
+                type="submit"
+                className="btn btn-primary align-self-center"
+              >
+                Register
               </button>
             </form>
-            <Link to="/auth/login">Have An Account</Link>
+            <Link className="align-self-center" to="/auth/login">
+              Have An Account
+            </Link>
           </div>
         </>
       ) : (

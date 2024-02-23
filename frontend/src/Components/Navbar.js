@@ -1,18 +1,30 @@
-import React from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../Store/Auth";
 
 const Navbar = () => {
   const { user, logOutHandal, getToken } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const { pathname } = location;
 
   const handalLogout = () => {
     logOutHandal();
     navigate("/auth/login");
   };
+  const handalShowOrNot = () => {
+    if (pathname == "/auth/login") {
+      return "d-none";
+    } else if (pathname == "/auth/signin") {
+      return "d-none";
+    } else {
+      return "";
+    }
+  };
+
   return (
     <>
-      <div>
+      <div className={handalShowOrNot()}>
         <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
           <div className="container-fluid">
             <NavLink className="navbar-brand" to={"/"}>

@@ -20,6 +20,7 @@ const Login = () => {
   const handalSubmit = async (e) => {
     setLoading(true);
     e.preventDefault();
+    // console.log("click");
     if (user.email === "" || user.password === "") {
       setLoading(false);
       toast.error("plese enter some value", {
@@ -75,8 +76,18 @@ const Login = () => {
     <>
       {!loading ? (
         <>
-          <div className="container border rounded p-2 mt-3">
-            <form onSubmit={handalSubmit}>
+          <div
+            className="border rounded p-2 mt-3 d-flex flex-column align-items-center "
+            style={{
+              margin: "auto",
+              width: "fit-content",
+              position: "absolute",
+              top: "45%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+            }}
+          >
+            <form className="d-flex flex-column" onSubmit={handalSubmit}>
               <div className="mb-3">
                 <label htmlFor="exampleInputEmail1" className="form-label">
                   Email address
@@ -94,49 +105,53 @@ const Login = () => {
                 <label htmlFor="exampleInputPassword1" className="form-label">
                   Password
                 </label>
-                <input
-                  type={btn ? "text" : "password"}
-                  className="form-control"
-                  id="exampleInputPassword1"
-                  value={user.password}
-                  onChange={(e) =>
-                    setUser({ ...user, password: e.target.value })
-                  }
-                />
-                <button
-                  type="button"
-                  style={{ height: "35px" }}
-                  className="btn btn-outline-primary m-1"
-                  onClick={() => setbtn(!btn)}
-                >
-                  {btn ? (
-                    <>
-                      <div className=" d-flex  align-items-baseline">
-                        <p className="mx-1">hide password</p>
-                        <img
-                          src="https://cdn-icons-png.flaticon.com/512/6423/6423885.png"
-                          width={"15px"}
-                          height={"15px"}
-                        />
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <div className=" d-flex  align-items-baseline">
-                        <p className="mx-1">show password</p>
-                        <img
-                          src="https://cdn-icons-png.flaticon.com/512/8395/8395688.png"
-                          width={"15px"}
-                          height={"15px"}
-                        />
-                      </div>
-                    </>
-                  )}
-                </button>
+                <div className="d-flex">
+                  <input
+                    type={btn ? "text" : "password"}
+                    className="form-control"
+                    id="exampleInputPassword1"
+                    value={user.password}
+                    onChange={(e) =>
+                      setUser({ ...user, password: e.target.value })
+                    }
+                  ></input>
+                  <button
+                    type="button"
+                    style={{ height: "35px" }}
+                    className="btn btn-outline-primary m-1"
+                    onClick={() => setbtn(!btn)}
+                  >
+                    {btn ? (
+                      <>
+                        <div className=" d-flex  align-items-baseline">
+                          <img
+                            src="https://cdn-icons-png.flaticon.com/512/6423/6423885.png"
+                            width={"15px"}
+                            height={"15px"}
+                          />
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <div className=" d-flex  align-items-baseline">
+                          <img
+                            src="https://cdn-icons-png.flaticon.com/512/8395/8395688.png"
+                            width={"15px"}
+                            height={"15px"}
+                          />
+                        </div>
+                      </>
+                    )}
+                  </button>
+                </div>
               </div>
 
-              <button type="submit" className="btn btn-primary">
-                Submit
+              <button
+                type="submit"
+                // onClick={handalSubmit}
+                className="btn btn-primary align-self-center"
+              >
+                Login
               </button>
             </form>
             <Link to="/auth/signin" className="">

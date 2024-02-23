@@ -1,4 +1,5 @@
 const User = require("../models/UserModel");
+const moment = require("moment");
 
 const getalluserData = async (req, res) => {
   try {
@@ -17,7 +18,7 @@ const deleteUSer = async (req, res) => {
       // return res.json("No User was deleted");s
       return res.json("User DELETED SuccessFully");
     }
-    return res.json(deleet);
+    // return res.json(deleet);
   } catch (error) {
     res.json(error);
   }
@@ -36,6 +37,9 @@ const editUSer = async (req, res) => {
           email: email,
           isAdmin: isAdmin,
           active: active,
+          date: {
+            updatedAt: moment().format("DD-MM-YYYY"),
+          },
         },
       }
     );
