@@ -3,10 +3,9 @@ import { useAuth } from "../Store/Auth";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Spinner from "./Spinner";
-import moment from "moment";
 
 const Adminpanal = () => {
-  const [allUser, setAllUser] = useState();
+  // const [allUser, setAllUser] = useState();
   const [activeUser, setActiveUser] = useState([]);
   const [nonactiveUser, setNonActiveUser] = useState([]);
   const [toggalactive, settoggalactive] = useState(true);
@@ -48,7 +47,7 @@ const Adminpanal = () => {
     let data = await response.json();
     // console.log(data);
 
-    let Done = setAllUser(data);
+    // let Done = setAllUser(data);
 
     let active = [];
     let inactive = [];
@@ -79,21 +78,18 @@ const Adminpanal = () => {
   };
   const handaldelete = async (no, typ) => {
     let userId;
-    if (typ == "nonactiveUser") {
+    if (typ === "nonactiveUser") {
       userId = nonactiveUser[no];
     } else {
       userId = activeUser[no];
     }
-    const response = await fetch(
-      `${process.env.REACT_APP_URL}/admin/deleteUser`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(userId),
-      }
-    );
+    await fetch(`${process.env.REACT_APP_URL}/admin/deleteUser`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(userId),
+    });
 
     toast.success("User Deletd", {
       autoClose: 2500,
@@ -112,7 +108,7 @@ const Adminpanal = () => {
     setLoading(true);
 
     setModalType("edituser");
-    if (type == "nonactiveUser") {
+    if (type === "nonactiveUser") {
       setEditUSer(nonactiveUser[index]);
       setIsUserEdited(nonactiveUser[index]);
     } else {
@@ -127,10 +123,10 @@ const Adminpanal = () => {
     setLoading(true);
     e.preventDefault();
     if (
-      editUser.username == "" ||
-      editUser.phone == "" ||
-      editUser.password == "" ||
-      editUser.email == ""
+      editUser.username === "" ||
+      editUser.phone === "" ||
+      editUser.password === "" ||
+      editUser.email === ""
     ) {
       setLoading(false);
       return toast.error("Must Fill All Items of User", {
@@ -222,10 +218,10 @@ const Adminpanal = () => {
     setLoading(true);
     e.preventDefault();
     if (
-      editUser.username == "" ||
-      editUser.phone == "" ||
-      editUser.password == "" ||
-      editUser.email == ""
+      editUser.username === "" ||
+      editUser.phone === "" ||
+      editUser.password === "" ||
+      editUser.email === ""
     ) {
       setLoading(false);
       return toast.error("Must Fill All Items of User", {
@@ -269,7 +265,7 @@ const Adminpanal = () => {
           draggable: true,
           theme: "colored",
         });
-      } else if (output.message == "User Already Exist with this mail") {
+      } else if (output.message === "User Already Exist with this mail") {
         toast.error(output.message, {
           autoClose: 2500,
           hideProgressBar: false,
@@ -602,7 +598,7 @@ const Modal = ({
                   className="btn btn-primary"
                   // data-bs-dismiss="modal"
                   onClick={(e) => {
-                    type == "edituser" ? handalEdit(e) : handalcreatenew(e);
+                    type === "edituser" ? handalEdit(e) : handalcreatenew(e);
                   }}
                 >
                   Save changes
@@ -643,7 +639,7 @@ const DisplayUser = ({ type, handalEditShow, user, handaldelete }) => {
                 >
                   Edit
                 </button>
-                {user.username == username ? null : (
+                {user.username === username ? null : (
                   <button
                     className="btn btn-danger mx-1"
                     onClick={() => handaldelete(index, type)}
